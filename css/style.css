@@ -1,0 +1,264 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: Inter;
+}
+
+.background-image {
+    position: fixed; 
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover; /* Покрывает всю область */
+    z-index: -1; /* Отправляет изображение на задний план */
+}
+.container {
+    max-width: 900px;
+    border-radius: 12px;
+    background: #ffffff;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    margin: 40px auto;
+    padding: 30px 20px;
+}
+
+.container__title {
+    color: #121417;
+    font-size: 36px;
+    font-weight: 900;
+    margin-bottom: 20px;
+    text-align: center;
+}
+form {
+    position: relative;
+    display: flex;
+    justify-content: space-between;
+    margin: 25px 8px;
+    border-radius: 12px;
+    background: #f2f2f2;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}
+.file-upload-btn {
+    position: absolute;
+    right: 10px;
+    top: 15px;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+}
+input[type="text"] {
+    width: 100%;
+    margin-bottom: 10px; 
+    border: none;
+    outline: none;
+    padding: 14px;
+    font-size: 14px;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 12px;
+    background: #ffffff;
+    transition: all 0.3s ease-in-out;
+}
+input[type="text"]:focus {
+    border-color: #007bff;
+    box-shadow: 0 0 8px rgba(0, 123, 255, 0.2);
+    outline: none;
+}
+.comments {
+    max-width: 600px;
+    margin: 20px auto;
+    padding: 15px;
+}
+
+.comment {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    border: 1px solid #ddd;
+    border-radius: 12px;
+    padding: 16px;
+    margin-bottom: 16px;
+    background-color: #fff;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    transition: transform 0.2s ease-in-out;
+}
+
+.comment:hover {
+    transform: translateY(-6px);
+}
+.user-info {
+    display: flex;
+    gap: 12px;
+    align-items: center;
+}
+
+.user-info .avatar {
+    width: 45px;
+    height: 45px;
+    object-fit: cover;
+    border-radius: 50%;
+    border: 2px solid #ddd;
+}
+.avatar img {
+    width: 40px;
+    height: 40px;
+    border-radius: 50%;
+    object-fit: cover;
+    margin-right: 10px;
+}
+.user-info .username {
+    font-family: Inter;
+    font-weight: 700;
+    font-size: 16px;
+    color: #333;
+}
+
+.user-info .time {
+    font-size: 12px;
+    color: #777;
+}
+
+.comment-text {
+    font-size: 15px;
+    line-height: 1.5;
+    color: #333;
+}
+
+.load_comment {
+    margin: 10px;
+    display: flex;
+    justify-content: center;
+}
+.load_comment__btn {
+    border-radius: 12px;
+    padding: 12px 18px;
+    text-align: center;
+    background-color: black;
+    color: white;
+    font-size: 14px;
+    font-weight: 500;
+    border: none;
+    cursor: pointer;
+    transition: background-color 0.3s;
+}
+
+.load_comment__btn a {
+    text-decoration: none;
+    color: white;
+}
+.load_comment__btn:hover {
+    background-color: gray;
+    transition: background-color 0.3s;
+}
+
+.comment-image {
+    max-width: 100%;
+    height: 500px;
+    border-radius: 8px;
+    object-fit: cover;
+    transition: transform 0.3s ease-in-out;
+}
+
+.comment-image:hover {
+    transform: scale(1.05);
+}
+
+.image-preview {
+    margin-top: 5px;
+    padding: 10px;
+}
+
+.preview-image {
+    max-width: 100px;
+    height: auto;
+    border-radius: 8px;
+    display: block;
+    margin: 5px auto;
+}
+
+.remove-btn {
+    display: block;
+    padding: 5px 6px;
+    cursor: pointer;
+    border-radius: 6px;
+    background: gainsboro;
+    color: black;
+    font-size: 14px;
+    margin: 5px auto;
+}
+#comment-count {
+    margin: 10px 15px;
+    font-size: 15px;
+    text-align: center;
+}
+
+.hidden {
+    display: none;
+}
+
+.modal {
+    display: none; 
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.9); /* Полупрозрачный черный фон */
+    overflow: auto;
+    transition: opacity 0.3s ease-in-out;
+}
+
+.modal-content {
+    margin: auto;
+    display: block;
+    max-width: 90vw; /* Ограничение по ширине */
+    max-height: 90vh;
+    width: auto;
+    height: auto;
+    position: absolute;
+    top: 50%;
+    left: 60%;
+    transform: translate(-50%, -50%);
+    transition: all 0.5s ease-in-out;
+}
+
+.close {
+    position: absolute;
+    top: -15px;
+    right: 265px;
+    color: #fff;
+    font-size: 35px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.close:hover {
+    color: #bbb;
+}
+.modal.visible {
+    display: block;
+    opacity: 1;
+}
+
+.modal.visible .modal-content {
+    opacity: 1;
+    transform: translateY(0);
+}
+/* Стили для изображений в комментариях */
+
+.comment-img img:hover {
+    transform: scale(1.05);
+}
+
+#modalImage {
+    width: 50%;
+    height: 50%;
+}
+
+.loading {
+    text-align: center;
+    padding: 10px;
+    font-size: 14px;
+    color: #555;
+}
