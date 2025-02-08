@@ -7,7 +7,7 @@ const { getRelativeTime } = require('./util.js');
 const sanitizeHtml = require('sanitize-html');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
-require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+require('dotenv').config();
 
 const pool = new Pool({
   connectionString: process.env.DATABASE_URL,
@@ -19,6 +19,8 @@ const commentLimiter = rateLimit({
     max: 1, // Разрешаем только 1 комментарий раз в 500 секунд
     message: { alert: "Слишком часто отправляете комментарии. Попробуйте позже." }
 });
+
+console.log("DATABASE_URL:", process.env.DATABASE_URL);
 
 const app = express();
 app.use(cors());
