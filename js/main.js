@@ -17,7 +17,7 @@ let offset = 0;
 const limit = 5;
 let isLoading = false;
 
-const API_URL = 'http://localhost:3000/comments';
+const API_URL = 'https://reviews-2-3xs8.onrender.com/comments';
 const DEFAULT_AVATAR = './img/male-person-silhouette-strict-suit-side-view-shadow-back-lit-white-background.jpg';
 
 const loadingIndicator = document.createElement('div');
