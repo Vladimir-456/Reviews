@@ -7,11 +7,17 @@ const { getRelativeTime } = require('./util.js');
 const sanitizeHtml = require('sanitize-html');
 const rateLimit = require('express-rate-limit');
 const helmet = require('helmet');
+require('dotenv').config({ path: path.resolve(__dirname, '../.env') });
+
+const pool = new Pool({
+  connectionString: process.env.DATABASE_URL,
+  ssl: process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false },
+});
 
 const commentLimiter = rateLimit({
-    windowMs: 10 * 1000, // 10 секунд
-    max: 1, // Разрешаем только 1 комментарий за 10 секунд
-    message: { error: "Слишком часто отправляете комментарии. Попробуйте позже." }
+    windowMs: 500 * 1000, // 500 секунд
+    max: 1, // Разрешаем только 1 комментарий раз в 500 секунд
+    message: { alert: "Слишком часто отправляете комментарии. Попробуйте позже." }
 });
 
 const app = express();
@@ -20,6 +26,7 @@ app.use(cors());
 app.use(express.json());
 
 app.use(helmet.crossOriginResourcePolicy({ policy: "cross-origin" }));
+
 // Настраиваем хранилище для multer
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -30,23 +37,23 @@ const storage = multer.diskStorage({
     cb(null, Date.now() + '-' + file.originalname);
   }
 });
+
 const upload = multer({ storage: storage });
+
+
+app.use(express.static(path.join(__dirname, ".."))); 
+
+app.get("/", (req, res) => {
+  res.sendFile(path.join(__dirname, "..", "index.html")); // Добавлен переход на уровень выше
+});
 
 // Создаем папку uploads, если ее еще нет (можно сделать через fs)
 const fs = require('fs');
-const uploadDir = path.join(__dirname, 'uploads');
+const uploadDir = path.join(__dirname, './uploads');
 if (!fs.existsSync(uploadDir)) {
     fs.mkdirSync(uploadDir);
 }
 
-const pool = new Pool({
-    user: 'postgres', 
-    host: 'localhost',
-    database: 'comments_db',
-    password: '12',
-    port: 5432,
-});
-  
 app.get('/comments', async (req, res) => {
     // По умолчанию загружаем 3 комментария, начиная с 0
     const limit = parseInt(req.query.limit, 10) || 5;
@@ -69,6 +76,8 @@ app.get('/comments', async (req, res) => {
       res.status(500).json({ error: err.message });
     }
   });
+
+
   app.post('/comments', commentLimiter, upload.single('image'), async (req, res) => {
     let { username, text } = req.body;
     let img = null;
@@ -99,7 +108,7 @@ app.get('/comments', async (req, res) => {
 // Статическая папка для загруженных файлов
 app.use('/uploads', express.static('uploads'));
 
-const port = 3000;
+const port = process.env.PORT || 3000;
 app.listen(port, () => {
-    console.log(`Сервер запущен на http://localhost:${port}`);
+  console.log(`Сервер запущен на порту ${port}`);
 });
