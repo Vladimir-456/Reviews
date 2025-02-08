@@ -14,6 +14,20 @@ const pool = new Pool({
   ssl: process.env.DATABASE_URL.includes('localhost') ? false : { rejectUnauthorized: false },
 });
 
+const createTableQuery = `
+    CREATE TABLE IF NOT EXISTS comments (
+        id SERIAL PRIMARY KEY,
+        username VARCHAR(100) NOT NULL,
+        text TEXT NOT NULL,
+        img TEXT,
+        created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    );
+`;
+
+pool.query(createTableQuery)
+    .then(() => console.log('Table "comments" created or already exists'))
+    .catch(err => console.error('Error creating table:', err));
+
 const commentLimiter = rateLimit({
     windowMs: 500 * 1000, // 500 секунд
     max: 1, // Разрешаем только 1 комментарий раз в 500 секунд
@@ -93,7 +107,7 @@ app.get('/comments', async (req, res) => {
     text = sanitizeHtml(text);
 
     if (req.file) {
-        img = `http://localhost:3000/uploads/${req.file.filename}`;
+      img = `https://reviews-2-3xs8.onrender.com/uploads/${req.file.filename}`;
     }
 
     try {
